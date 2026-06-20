@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Real Wallet — USD</title>
+<title>Prawdziwy Portfel — PLN</title>
 
 <style>
 :root{
-  --bg:linear-gradient(180deg,#6f8fd6 0%,#3e63b8 45%,#0e1a33 100%);
-  --primary:#3e63b8;
-  --panel:#ffffff;
-  --muted:#777;
+  --bg:linear-gradient(180deg,#0f2027 0%,#203a43 45%,#2c5364 100%);
+  --primary:#00c9a7;
+  --panel:#1e2a38;
+  --muted:#9fb3c8;
   --radius:16px;
 }
 *{box-sizing:border-box}
@@ -19,12 +19,13 @@ body{
   font-family:Inter,system-ui,Arial;
   background:var(--bg);
   min-height:100vh;
+  color:#e6f0ff;
 }
 .hidden{display:none}
 
 .header{
   padding:14px 16px;
-  background:rgba(0,0,0,.35);
+  background:rgba(0,0,0,.5);
   backdrop-filter:blur(10px);
   color:#fff;
   display:flex;
@@ -40,7 +41,7 @@ body{
   padding-bottom:90px;
 }
 .card{
-  background:linear-gradient(160deg,#4f7cf0,#2e4fa3);
+  background:linear-gradient(160deg,#00c9a7,#005f73);
   color:#fff;
   padding:20px;
   border-radius:var(--radius);
@@ -54,7 +55,7 @@ body{
 }
 .action{
   flex:1;
-  background:linear-gradient(160deg,#4f7cf0,#2e4fa3);
+  background:linear-gradient(160deg,#00c9a7,#005f73);
   color:#fff;
   text-align:center;
   padding:14px;
@@ -69,12 +70,12 @@ body{
   gap:14px;
 }
 .panel{
-  background:rgba(255,255,255,.92);
+  background:rgba(30,42,56,.95);
   border-radius:14px;
   padding:14px;
 }
 .tx{
-  background:rgba(62,99,184,.1);
+  background:rgba(0,201,167,.1);
   padding:10px;
   border-radius:10px;
   margin-bottom:8px;
@@ -87,8 +88,8 @@ body{
   margin-top:16px;
   padding:14px;
   border-radius:12px;
-  background:rgba(255,0,0,.08);
-  color:#900;
+  background:rgba(255,80,80,.15);
+  color:#ff6b6b;
   font-weight:600;
   text-align:center;
 }
@@ -98,35 +99,36 @@ body{
   bottom:0;
   left:0;
   right:0;
-  background:rgba(0,0,0,.6);
+  background:rgba(0,0,0,.7);
   backdrop-filter:blur(12px);
   display:flex;
   justify-content:space-around;
   padding:10px 0;
 }
 .nav-item{
-  color:#cfd6ff;
+  color:#9fb3c8;
   text-align:center;
   font-size:.75rem;
   cursor:pointer;
 }
-.nav-item.active{color:#1de9b6}
+.nav-item.active{color:#00c9a7}
 .nav-item div{font-size:20px}
 
 .modal-back{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.4);
+  background:rgba(0,0,0,.6);
   display:none;
   align-items:center;
   justify-content:center;
 }
 .modal{
-  background:#fff;
+  background:#1e2a38;
   padding:20px;
   border-radius:16px;
   width:320px;
   text-align:center;
+  color:#e6f0ff;
 }
 
 .toast{
@@ -134,8 +136,8 @@ body{
   bottom:100px;
   left:50%;
   transform:translateX(-50%);
-  background:#111;
-  color:#0ff;
+  background:#000;
+  color:#00c9a7;
   padding:10px 16px;
   border-radius:10px;
   display:none;
@@ -146,81 +148,81 @@ body{
 <body>
 
 <div class="header">
-  <span id="pageTitle">Home</span>
-  <button onclick="logout()" style="background:#0003;color:#fff;border:none;padding:6px 10px;border-radius:8px">Logout</button>
+  <span id="pageTitle">Strona główna</span>
+  <button onclick="logout()" style="background:#0005;color:#fff;border:none;padding:6px 10px;border-radius:8px">Wyloguj się</button>
 </div>
 
 <div class="app" id="home">
   <div class="card">
-    <div>Wallet Balance</div>
-    <div class="balance" id="balance">$1,500,000.00</div>
+    <div>Saldo portfela</div>
+    <div class="balance" id="balance">1 500 000,00 €</div>
   </div>
 
   <div class="actions">
-    <div class="action" onclick="showFrozenModal()">Transfer</div>
-    <div class="action" onclick="showFrozenModal()">Withdraw</div>
-    <div class="action" onclick="showFrozenModal()">Pay Bills</div>
+    <div class="action" onclick="showFrozenModal()">Przelew</div>
+    <div class="action" onclick="showFrozenModal()">Wypłata</div>
+    <div class="action" onclick="showFrozenModal()">Opłać rachunki</div>
   </div>
 
   <div class="grid">
     <div class="panel">
-      <strong>Transaction History</strong>
+      <strong>Historia transakcji</strong>
       <div id="txList"></div>
     </div>
     <div class="panel">
-      <strong>Account Information</strong>
-      <p class="muted">Level 4 • Verified</p>
-      <p class="muted">Do not share your details</p>
+      <strong>Informacje o koncie</strong>
+      <p class="muted">Poziom 4 • Zweryfikowane</p>
+      <p class="muted">Nie udostępniaj swoich danych</p>
     </div>
   </div>
 </div>
 
 <div class="app hidden" id="finance">
   <div class="panel">
-    <h3>Finance</h3>
-    <p class="muted">Expense and income analysis</p>
-    <p><strong>Monthly Expenses:</strong> $615,000</p>
-    <p><strong>Savings:</strong> $2,300,000</p>
+    <h3>Finanse</h3>
+    <p class="muted">Analiza wydatków i przychodów</p>
+    <p><strong>Miesięczne wydatki:</strong> 615 000 €</p>
+    <p><strong>Oszczędności:</strong> 2 300 000 €</p>
   </div>
 </div>
 
 <div class="app hidden" id="rewards">
   <div class="panel">
-    <h3>Rewards</h3>
-    <p class="muted">Available points</p>
-    <h2>12,450 pts</h2>
+    <h3>Nagrody</h3>
+    <p class="muted">Dostępne punkty</p>
+    <h2>12 450 pkt</h2>
     <button onclick="showFrozenModal()" style="width:100%;padding:12px;border-radius:12px;border:none;background:var(--primary);color:#fff">
-      Redeem Rewards
+      Wymień nagrody
     </button>
   </div>
 </div>
 
 <div class="app hidden" id="cards">
   <div class="panel">
-    <h3>Cards</h3>
+    <h3>Karty</h3>
     <div class="card">
-      <div>Virtual Card</div>
+      <div>Karta wirtualna</div>
       <div class="balance">**** 4921</div>
-      <p class="muted">Active</p>
+      <p class="muted">Aktywna</p>
     </div>
   </div>
 </div>
 
 <div class="app hidden" id="me">
   <div class="panel">
-    <h3>My Profile</h3>
-    <p><strong>Status:</strong> Verified</p>
-    <p><strong>Country:</strong> USA</p>
-    <p><strong>Currency:</strong> $</p>
+    <h3>Mój profil</h3>
+    <p><strong>Status:</strong> Zweryfikowane</p>
+    <p><strong>Kraj:</strong> Polska</p>
+    <p><strong>Waluta:</strong> €</p>
   </div>
 </div>
 
 <div class="nav">
-  <div class="nav-item active" onclick="switchTab('home',this)"><div>🏠</div>Home</div>
-  <div class="nav-item" onclick="switchTab('rewards',this)"><div>🎁</div>Rewards</div>
-  <div class="nav-item" onclick="switchTab('finance',this)"><div>📈</div>Finance</div>
-  <div class="nav-item" onclick="switchTab('cards',this)"><div>💳</div>Cards</div>
-  <div class="nav-item" onclick="switchTab('me',this)"><div>👤</div>Me</div>
+  <div class="nav-item active" onclick="switchTab('home',this)"><div>🏠</div>Strona główna</div>
+  <div class="nav-item" onclick="switchTab('rewards',this)"><div>🎁</div>Nagrody</div>
+  <div class="nav-item" onclick="switchTab('finance',this)"><div>📈</div>Finanse</div>
+  <div class="nav-item" onclick="switchTab('cards',this)"><div>💳</div>Karty</div>
+  <div class="nav-item" onclick="switchTab('me',this)"><div>👤</div>Ja</div>
 </div>
 
 <div class="modal-back" id="modalBack">
@@ -230,11 +232,11 @@ body{
 <div class="toast" id="toast"></div>
 
 <script>
-let balanceValue = 1500000;
+let balanceValue = 1600000;
 let tx = [];
 
 const $ = id => document.getElementById(id);
-const fmt = n => n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmt = n => n.toLocaleString('pl-PL');
 
 function showToast(t){
   toast.textContent=t;
@@ -246,7 +248,7 @@ function addFrozenNote(container){
   if(container.querySelector('.frozen-note')) return;
   const note=document.createElement('div');
   note.className='frozen-note';
-  note.innerHTML='Hello Hyun Jessica, this account was frozen due to invalid logins';
+  note.innerHTML='Konto zostało zamrożone po śmierci pana Bartek Kołodziej Szczepaniak';
   container.appendChild(note);
 }
 
@@ -262,21 +264,22 @@ function switchTab(id,el){
 
 function showFrozenModal(){
   modal.innerHTML=`
-    <h3>Account Locked</h3>
+    <h3>Konto zablokowane</h3>
     <p class="muted">
-    account frozen you need a credit card worth 6000 to unlock this account contact the bank manager to unfreeze Account +56954547809
+    To konto zostało zamrożone po śmierci<br>
+      <strong>pana Bartek Kołodziej Szczepaniak</strong>
     </p>
-    <button onclick="modalBack.style.display='none'">Close</button>
+    <button onclick="modalBack.style.display='none'">Zamknij</button>
   `;
   modalBack.style.display='flex';
 }
 
 function logout(){
-  showToast('Logged out');
+  showToast('Wylogowano');
 }
 
 function render(){
-  balance.textContent = '$' + fmt(balanceValue);
+  balance.textContent = fmt(balanceValue)+' €';
   txList.innerHTML='';
   tx.forEach(t=>{
     const d=document.createElement('div');
@@ -286,7 +289,7 @@ function render(){
         <strong>${t.type}</strong>
         <div class="muted">${t.name}</div>
       </div>
-      <div><strong>- $${fmt(t.amount)}</strong></div>
+      <div><strong>- ${fmt(t.amount)} €</strong></div>
     `;
     txList.appendChild(d);
   });
@@ -295,7 +298,7 @@ function render(){
 (function(){
   balance=document.getElementById('balance');
   for(let i=1;i<=6;i++){
-    tx.push({type:'Transfer',name:'Client '+i,amount:[5000,10000,100000][i%3]});
+    tx.push({type:'Przelew',name:'Klient '+i,amount:[5000,10000,100000][i%3]});
   }
   render();
 })();
